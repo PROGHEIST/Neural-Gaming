@@ -1,0 +1,49 @@
+<div class="container">
+  <h1>{{ title() }}</h1>
+
+  <h2>PC Setups</h2>
+  <div class="pc-setups">
+    <div *ngIf="pcSetups().length === 0" class="no-data">
+      No PC setups found.
+    </div>
+    <div *ngFor="let setup of pcSetups()" class="pc-setup-card">
+      <h3>Setup #{{ setup.id }}</h3>
+      <p><strong>CPU:</strong> {{ setup.cpu }}</p>
+      <p><strong>GPU:</strong> {{ setup.gpu }}</p>
+      <p><strong>RAM:</strong> {{ setup.ram }} GB</p>
+      <p><strong>Storage Type:</strong> {{ setup.storage_type }}</p>
+      <p *ngIf="setup.cooling"><strong>Cooling:</strong> {{ setup.cooling }}</p>
+      <p *ngIf="setup.psu"><strong>PSU:</strong> {{ setup.psu }}</p>
+      <p *ngIf="setup.created_at"><strong>Created At:</strong> {{ setup.created_at }}</p>
+      <button (click)="selectSetup(setup)" [class.selected]="selectedSetup()?.id === setup.id">Select</button>
+    </div>
+  </div>
+
+  <h2>Games</h2>
+  <div class="games">
+    <div *ngIf="games().length === 0" class="no-data">
+      No games found.
+    </div>
+    <div *ngFor="let game of games()" class="game-card">
+      <h3>{{ game.name }}</h3>
+      <p *ngIf="game.genre"><strong>Genre:</strong> {{ game.genre }}</p>
+      <p *ngIf="game.developer"><strong>Developer:</strong> {{ game.developer }}</p>
+      <p *ngIf="game.release_year"><strong>Release Year:</strong> {{ game.release_year }}</p>
+      <p *ngIf="game.min_cpu"><strong>Min CPU:</strong> {{ game.min_cpu }}</p>
+      <p *ngIf="game.min_gpu"><strong>Min GPU:</strong> {{ game.min_gpu }}</p>
+      <p *ngIf="game.min_ram"><strong>Min RAM:</strong> {{ game.min_ram }} GB</p>
+      <button (click)="selectGame(game)" [class.selected]="selectedGame()?.id === game.id">Select</button>
+    </div>
+  </div>
+
+  <div *ngIf="selectedSetup() && selectedGame()" class="prediction-section">
+    <h2>Performance Prediction</h2>
+    <div *ngIf="loading()" class="loading">Loading prediction...</div>
+    <div *ngIf="prediction()" class="prediction-result">
+      <p><strong>Predicted FPS:</strong> {{ prediction()?.predicted_fps }}</p>
+      <p><strong>CPU Usage:</strong> {{ prediction()?.cpu_usage }}%</p>
+      <p><strong>GPU Usage:</strong> {{ prediction()?.gpu_usage }}%</p>
+      <p><strong>Temperature:</strong> {{ prediction()?.temperature }}°C</p>
+    </div>
+  </div>
+</div>

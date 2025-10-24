@@ -1,7 +1,8 @@
-# TODO: Implement Next-Gen Futuristic UI for Neural Gaming
+# TODO: Make Predictions Workable
 
-## Tasks
-- [ ] Update app.html with futuristic dashboard UI featuring header, PC setup selection cards, game selection cards, and prediction display area
-- [ ] Update app.css with dark theme, neon gradients, glowing effects, animations, and responsive design
-- [ ] Run Angular development server to test the UI
-- [ ] Verify API integration works correctly with the new UI
+## Steps to Complete
+- [ ] Add PredictionSerializer to neural_gaming/api/serializers.py
+- [ ] Update predict_performance function in neural_gaming/api/views.py to implement actual prediction logic using GamePerformanceDataset
+- [ ] Run populate_db command to ensure sample data is available
+- [ ] Test the prediction endpoint with setup_id and game_id
+- [ ] Verify predictions are saved in the database

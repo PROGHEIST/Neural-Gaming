@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PCSetup, Game, Feedback
+from .models import PCSetup, Game, Feedback, Prediction
 
 class PCSetupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,4 +14,9 @@ class GameSerializer(serializers.ModelSerializer):
 class FeedbackSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feedback
+        fields = '__all__'
+
+class PredictionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Prediction
         fields = '__all__'
