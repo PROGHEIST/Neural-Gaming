@@ -1,0 +1,83 @@
+@startuml ERD
+entity User {
+  * id : integer <<PK>>
+  --
+  username : string
+  email : string
+  password : string
+  date_joined : datetime
+}
+
+entity PCSetup {
+  * id : integer <<PK>>
+  --
+  user_id : integer <<FK>>
+  cpu : string
+  gpu : string
+  ram : integer
+  storage_type : string
+  cooling : string
+  psu : string
+  created_at : datetime
+}
+
+entity Game {
+  * id : integer <<PK>>
+  --
+  name : string
+  genre : string
+  developer : string
+  release_year : integer
+  min_cpu : string
+  min_gpu : string
+  min_ram : integer
+}
+
+entity GamePerformanceDataset {
+  * id : integer <<PK>>
+  --
+  cpu : string
+  gpu : string
+  ram : integer
+  storage_type : string
+  game_id : integer <<FK>>
+  fps : float
+  cpu_usage : float
+  gpu_usage : float
+  temperature : float
+  created_at : datetime
+}
+
+entity Prediction {
+  * id : integer <<PK>>
+  --
+  setup_id : integer <<FK>>
+  game_id : integer <<FK>>
+  predicted_fps : float
+  predicted_cpu_usage : float
+  predicted_gpu_usage : float
+  predicted_temperature : float
+  created_at : datetime
+}
+
+entity Feedback {
+  * id : integer <<PK>>
+  --
+  user_id : integer <<FK>>
+  setup_id : integer <<FK>>
+  game_id : integer <<FK>>
+  prediction_id : integer <<FK>>
+  actual_fps : float
+  rating : integer
+  comments : text
+  created_at : datetime
+}
+
+User ||--o{ PCSetup : "has"
+PCSetup ||--o{ Prediction : "used for"
+PCSetup ||--o{ Feedback : "provides"
+Game ||--o{ Prediction : "predicted for"
+Game ||--o{ Feedback : "feedback on"
+Game ||--o{ GamePerformanceDataset : "data for"
+Prediction ||--o{ Feedback : "feedback on"
+@enduml
