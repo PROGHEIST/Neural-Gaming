@@ -1,67 +1,104 @@
 from django.db import models
-from django.contrib.auth.models import User
 
-class PCSetup(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    cpu = models.CharField(max_length=100)
-    gpu = models.CharField(max_length=100)
-    ram = models.IntegerField()  # in GB
-    storage_type = models.CharField(max_length=50)  # e.g., SSD, HDD
-    cooling = models.CharField(max_length=100, blank=True, null=True)
-    psu = models.CharField(max_length=100, blank=True, null=True)
-    created_at = models.DateTimeField(null=True, blank=True)
+class UserProfile(models.Model):
+    username = models.CharField(max_length=100)
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.cpu} + {self.gpu}"
+        return self.username
 
-class Game(models.Model):
+class CPU(models.Model):
     name = models.CharField(max_length=100)
-    genre = models.CharField(max_length=50, blank=True, null=True)
-    developer = models.CharField(max_length=100, blank=True, null=True)
-    release_year = models.IntegerField(blank=True, null=True)
-    min_cpu = models.CharField(max_length=100, blank=True, null=True)
-    min_gpu = models.CharField(max_length=100, blank=True, null=True)
-    min_ram = models.IntegerField(blank=True, null=True)
+    cores = models.IntegerField()
+    threads = models.IntegerField()
+    base_clock = models.FloatField() 
+    boost_clock = models.FloatField()
+    tdp = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+    
+class GPU(models.Model):
+    name = models.CharField(max_length=100)
+    vram = models.IntegerField()  # in GB
+    base_clock = models.FloatField()
+    boost_clock = models.FloatField()
+    tdp = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def __str__(self):
         return self.name
 
-class GamePerformanceDataset(models.Model):
-    cpu = models.CharField(max_length=100)
-    gpu = models.CharField(max_length=100)
-    ram = models.IntegerField()
-    storage_type = models.CharField(max_length=50)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    fps = models.FloatField()
-    cpu_usage = models.FloatField()
-    gpu_usage = models.FloatField()
-    temperature = models.FloatField()
+class RAM(models.Model):
+    name = models.CharField(max_length=100)
+    capacity = models.IntegerField()  # in GB
+    speed = models.IntegerField()  # in MHz
+    type = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Storage(models.Model):
+    name = models.CharField(max_length=100)
+    capacity = models.IntegerField()  # in GB
+    type = models.CharField(max_length=50)  # e.g., SSD, HDD
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Motherboard(models.Model):
+    name = models.CharField(max_length=100)
+    chipset = models.CharField(max_length=100)
+    form_factor = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class PowerSupply(models.Model):
+    name = models.CharField(max_length=100)
+    wattage = models.IntegerField()  # in Watts
+    efficiency_rating = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+class ComputerBuild(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    cpu = models.ForeignKey(CPU, on_delete=models.CASCADE)
+    gpu = models.ForeignKey(GPU, on_delete=models.CASCADE)
+    ram = models.ForeignKey(RAM, on_delete=models.CASCADE)
+    storage = models.ForeignKey(Storage, on_delete=models.CASCADE)
+    motherboard = models.ForeignKey(Motherboard, on_delete=models.CASCADE)
+    power_supply = models.ForeignKey(PowerSupply, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Dataset for {self.game.name}"
+        return f"Build by {self.user.username} on {self.created_at.strftime('%Y-%m-%d')}"
 
-class Prediction(models.Model):
-    setup = models.ForeignKey(PCSetup, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    predicted_fps = models.FloatField()
-    predicted_cpu_usage = models.FloatField()
-    predicted_gpu_usage = models.FloatField()
-    predicted_temperature = models.FloatField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Prediction for {self.setup} playing {self.game.name}"
-
-class Feedback(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    setup = models.ForeignKey(PCSetup, on_delete=models.CASCADE)
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    prediction = models.ForeignKey(Prediction, on_delete=models.CASCADE, null=True, blank=True)
-    actual_fps = models.FloatField()
-    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])  # 1-5
-    comments = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+class GameBenchmark(models.Model):
+    build = models.ForeignKey(ComputerBuild, on_delete=models.CASCADE)
+    game_name = models.CharField(max_length=100)
+    average_fps = models.FloatField()
+    resolution = models.CharField(max_length=50)
+    settings = models.CharField(max_length=100)
+    recorded_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Feedback by {self.user.username} for {self.game.name}"
+        return f"{self.game_name} Benchmark for {self.build}"
+    
+class PerformanceMetric(models.Model):
+    build = models.ForeignKey(ComputerBuild, on_delete=models.CASCADE)
+    cpu_usage = models.FloatField()  # in percentage
+    gpu_usage = models.FloatField()  # in percentage
+    ram_usage = models.FloatField()  # in percentage
+    temperature = models.FloatField()  # in Celsius
+    recorded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Performance Metric for {self.build} at {self.recorded_at.strftime('%Y-%m-%d %H:%M:%S')}"

@@ -6,3 +6,4 @@
 - [ ] Run populate_db command to ensure sample data is available
 - [ ] Test the prediction endpoint with setup_id and game_id
 - [ ] Verify predictions are saved in the database
+- [x] Modify predict_performance to check for existing prediction and avoid duplicates

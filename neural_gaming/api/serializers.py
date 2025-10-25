@@ -1,22 +1,37 @@
 from rest_framework import serializers
-from .models import PCSetup, Game, Feedback, Prediction
+from .models import UserProfile, CPU, GPU, RAM, Storage, Motherboard, PowerSupply
 
-class PCSetupSerializer(serializers.ModelSerializer):
+class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
-        model = PCSetup
+        model = UserProfile
         fields = '__all__'
 
-class GameSerializer(serializers.ModelSerializer):
+class CPUSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Game
+        model = CPU
         fields = '__all__'
 
-class FeedbackSerializer(serializers.ModelSerializer):
+class GPUSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Feedback
+        model = GPU
         fields = '__all__'
 
-class PredictionSerializer(serializers.ModelSerializer):
+class RAMSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Prediction
+        model = RAM
+        fields = '__all__'
+
+class StorageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Storage
+        fields = '__all__'
+
+class MotherboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Motherboard
+        fields = '__all__'
+
+class PowerSupplySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PowerSupply
         fields = '__all__'

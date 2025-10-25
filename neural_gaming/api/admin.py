@@ -1,6 +1,10 @@
 from django.contrib import admin
-from .models import PCSetup, Game, Feedback
+from .models import UserProfile, CPU, GPU, RAM, Storage, Motherboard, PowerSupply
 
-admin.site.register(PCSetup)
-admin.site.register(Game)
-admin.site.register(Feedback)
+admin.site.register(UserProfile)
+admin.site.register(CPU)
+admin.site.register(GPU)
+admin.site.register(RAM)  
+admin.site.register(Storage)
+admin.site.register(Motherboard)
+admin.site.register(PowerSupply)

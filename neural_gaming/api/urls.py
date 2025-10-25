@@ -1,13 +1,19 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
+from .views import (UserProfileViewSet, CPUViewSet, GPUViewSet, RAMViewSet,
+                    StorageViewSet, MotherboardViewSet, PowerSupplyViewSet)
 
 router = DefaultRouter()
-router.register(r'pcsetups', views.PCSetupViewSet)
-router.register(r'games', views.GameViewSet)
+router.register(r'userprofiles', UserProfileViewSet)
+router.register(r'cpus', CPUViewSet)
+router.register(r'gpus', GPUViewSet)
+router.register(r'rams', RAMViewSet)
+router.register(r'storages', StorageViewSet)
+router.register(r'motherboards', MotherboardViewSet)
+router.register(r'powersupplies', PowerSupplyViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('feedback/', views.submit_feedback, name='submit_feedback'),
-    path('predict/', views.predict_performance, name='predict_performance'),
 ]

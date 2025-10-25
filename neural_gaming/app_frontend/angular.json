@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "NG-frontend": {
+    "app_frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -33,12 +33,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "server": "src/main.server.ts",
-            "outputMode": "server",
-            "ssr": {
-              "entry": "src/server.ts"
-            }
+            ]
           },
           "configurations": {
             "production": {
@@ -68,10 +63,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "NG-frontend:build:production"
+              "buildTarget": "app_frontend:build:production"
             },
             "development": {
-              "buildTarget": "NG-frontend:build:development"
+              "buildTarget": "app_frontend:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -96,8 +91,5 @@
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "c3147a84-cfc0-4ee8-b6aa-0e37d63b55aa"
   }
 }
